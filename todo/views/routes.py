@@ -1,11 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import jsonify, request
 
 TODOS = []
 NEXT_ID = 1
 
 
-def create_app():
-    app = Flask(__name__)
+def register_routes(app):
 
     @app.get("/health")
     def health():
@@ -41,5 +40,3 @@ def create_app():
                 return jsonify(todo), 200
 
         return jsonify({"error": "not found"}), 404
-
-    return app
