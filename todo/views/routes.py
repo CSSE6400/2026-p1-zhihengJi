@@ -6,31 +6,37 @@ NEXT_ID = 1
 
 def register_routes(app):
 
-    @app.get("/health")
+    @app.get("/api/v1/health")
     def health():
-        return jsonify({"status": "ok"})
+        return jsonify({"status": "ok"}), 200
 
-    @app.get("/todos")
+
+    @app.get("/api/v1/todos")
     def list_todos():
-        return jsonify(TODOS)
+        return jsonify(TODOS), 200
 
-    @app.post("/todos")
+
+    @app.post("/api/v1/todos")
     def create_todo():
         global NEXT_ID
 
-        data = request.get_json(silent=True) or {}
-        task = data.get("task")
+        data = request.get_json(silent=True)
 
-        if not task:
+        if not data or "task" not in data:
             return jsonify({"error": "task required"}), 400
 
-        todo = {"id": NEXT_ID, "task": task}
+        todo = {
+            "id": NEXT_ID,
+            "task": data["task"]
+        }
+
         TODOS.append(todo)
         NEXT_ID += 1
 
         return jsonify(todo), 201
 
-    @app.delete("/todos/<int:todo_id>")
+
+    @app.delete("/api/v1/todos/<int:todo_id>")
     def delete_todo(todo_id):
         global TODOS
 

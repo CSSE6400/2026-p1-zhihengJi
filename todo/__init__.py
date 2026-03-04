@@ -1,5 +1,11 @@
 from flask import Flask
 from todo.views.routes import register_routes
 
-app = Flask(__name__)
-register_routes(app)
+
+def create_app():
+    app = Flask(__name__)
+    register_routes(app)
+    return app
+
+
+app = create_app()
